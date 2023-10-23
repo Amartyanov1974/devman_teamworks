@@ -18,6 +18,7 @@ class Time_range(models.Model):
                                  default=time(20,00),
                                  db_index=True)
 
+
     def __str__(self) -> str:
         return str(f'{self.start_time} {self.end_time}')
 
@@ -37,7 +38,12 @@ class Student(models.Model):
                                   max_length=20)
     time_range = models.ForeignKey(Time_range,
                                    on_delete = models.SET_DEFAULT,
+                                   related_name='students',
+                                   null=True,
+                                   blank=True,
                                    default=None)
+    far_east = models.BooleanField(verbose_name='С Дальнего Востока',
+                                  default=False)
 
     def __str__(self) -> str:
         return str(self.name)
@@ -58,6 +64,3 @@ class Project_manager(models.Model):
     class Meta:
         verbose_name = 'Проект-менеджер'
         verbose_name_plural = 'Проект-менеджеры'
-
-
-
