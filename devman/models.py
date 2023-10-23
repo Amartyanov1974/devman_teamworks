@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import time
 
 
 LEVEL_CHOICES = [
@@ -36,3 +37,22 @@ class Project_manager(models.Model):
     class Meta:
         verbose_name = 'Проект-менеджер'
         verbose_name_plural = 'Проект-менеджеры'
+
+
+class Time_range(models.Model):
+    start_time = models.TimeField(verbose_name='Начало диапазона',
+                                 default=time(8,00),
+                                 db_index=True)
+    end_time = models.TimeField(verbose_name='Конец диапазона',
+                                 default=time(20,00),
+                                 db_index=True)
+
+    def __str__(self) -> str:
+        return str(f'{self.start_time} {self.end_time}')
+
+    class Meta:
+        verbose_name = 'Временной диапазон'
+        verbose_name_plural = 'Временные диапазоны'
+        unique_together = ('start_time', 'end_time',)
+
+
