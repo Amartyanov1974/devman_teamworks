@@ -9,25 +9,6 @@ LEVEL_CHOICES = [
 ]
 
 
-
-class Time_range(models.Model):
-    start_time = models.TimeField(verbose_name='Начало диапазона',
-                                 default=time(8,00),
-                                 db_index=True)
-    end_time = models.TimeField(verbose_name='Конец диапазона',
-                                 default=time(20,00),
-                                 db_index=True)
-
-
-    def __str__(self) -> str:
-        return str(f'{self.start_time} {self.end_time}')
-
-    class Meta:
-        verbose_name = 'Временной диапазон'
-        verbose_name_plural = 'Временные диапазоны'
-        unique_together = ('start_time', 'end_time',)
-
-
 class Student(models.Model):
     name = models.CharField(verbose_name='Имя', max_length=20)
     level = models.CharField(max_length=10,
@@ -36,14 +17,20 @@ class Student(models.Model):
                              default='newbie')
     tg_account = models.CharField(verbose_name='Телеграм-аккаунт',
                                   max_length=20)
-    time_range = models.ForeignKey(Time_range,
-                                   on_delete = models.SET_DEFAULT,
-                                   related_name='students',
-                                   null=True,
-                                   blank=True,
-                                   default=None)
+    # time_range = models.ForeignKey(Time_range,
+                                   # on_delete = models.SET_DEFAULT,
+                                   # related_name='students',
+                                   # null=True,
+                                   # blank=True,
+                                   # default=None)
     far_east = models.BooleanField(verbose_name='С Дальнего Востока',
                                   default=False)
+    start_time = models.TimeField(verbose_name='Начало диапазона',
+                                 default=time(8,00),
+                                 db_index=True)
+    end_time = models.TimeField(verbose_name='Конец диапазона',
+                                 default=time(20,00),
+                                 db_index=True)
 
     def __str__(self) -> str:
         return str(self.name)
