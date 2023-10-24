@@ -40,7 +40,7 @@ class Student(models.Model):
         verbose_name_plural = 'Cтуденты'
 
 
-class Project_manager(models.Model):
+class ProjectManager(models.Model):
     name = models.CharField(verbose_name='Имя', max_length=20)
     tg_account = models.CharField(verbose_name='Телеграм-аккаунт',
                                   max_length=20)

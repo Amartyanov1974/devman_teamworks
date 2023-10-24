@@ -1,5 +1,5 @@
 from django.contrib import admin
-from devman.models import Student, Project_manager
+from devman.models import Student, ProjectManager
 
 
 
@@ -13,7 +13,7 @@ class ClientAdmin(admin.ModelAdmin):
     list_display = ['name', 'tg_account', 'level','far_east', 'start_time', 'end_time']
 
 
-@admin.register(Project_manager)
+@admin.register(ProjectManager)
 class Project_managerAdmin(admin.ModelAdmin):
     list_display = ['name', 'tg_account']
 
