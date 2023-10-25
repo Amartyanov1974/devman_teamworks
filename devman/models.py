@@ -3,7 +3,7 @@ from datetime import time
 
 
 LEVEL_CHOICES = [
-    ('June', 'June'),
+    ('june', 'june'),
     ('newbie+', 'newbie+'),
     ('newbie', 'newbie'),
 ]
@@ -17,12 +17,10 @@ class Student(models.Model):
                              default='newbie')
     tg_account = models.CharField(verbose_name='Телеграм-аккаунт',
                                   max_length=20)
-    # time_range = models.ForeignKey(Time_range,
-                                   # on_delete = models.SET_DEFAULT,
-                                   # related_name='students',
-                                   # null=True,
-                                   # blank=True,
-                                   # default=None)
+    trello_account = models.CharField(verbose_name='Трелло-аккаунт',
+                                      max_length=20,
+                                      blank=True,
+                                      null=True)
     far_east = models.BooleanField(verbose_name='С Дальнего Востока',
                                   default=False)
     start_time = models.TimeField(verbose_name='Начало диапазона',
@@ -44,6 +42,8 @@ class ProjectManager(models.Model):
     name = models.CharField(verbose_name='Имя', max_length=20)
     tg_account = models.CharField(verbose_name='Телеграм-аккаунт',
                                   max_length=20)
+    trello_account = models.CharField(verbose_name='Трелло-аккаунт',
+                                      max_length=20)
 
     def __str__(self) -> str:
         return str(self.name)

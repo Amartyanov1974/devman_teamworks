@@ -1,0 +1,31 @@
+{
+    "project_managers":
+        [
+            {
+                "name": "Егор Дуняхин",
+                "tg_account": "@dunyakhin_on_air",
+                "trello_account": "@egordunyakhin"
+            }
+        ],
+    "students":
+        [
+            {
+                "name": "Ярослав Ворошилов",
+                "tg_account": "@frqhero",
+                "trello_account": "@frqhero",
+                "level": "june"
+            },
+            {
+                "name": "Роман Рвачёв",
+                "tg_account": "@roma_rvv",
+                "trello_account": "@user80963179",
+                "level": "june"
+            },
+            {
+                "name": "Александр Мартьянов",
+                "tg_account": "@Alexander_Martianov",
+                "trello_account": "@alexander_martianov",
+                "level": "june"
+            }
+        ]
+}
