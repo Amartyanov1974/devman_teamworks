@@ -5,17 +5,18 @@ from telegram.ext import (
     Updater,
     ConversationHandler,
     CommandHandler,
-    CallbackQueryHandler, CallbackContext,
+    CallbackQueryHandler,
+    CallbackContext,
 )
 
 
 TIMESLOTS = [
-        '17:00',
-        '18:00',
-        '19:00',
-        '20:00',
-        '21:00',
-    ]
+    '17:00',
+    '18:00',
+    '19:00',
+    '20:00',
+    '21:00',
+]
 
 
 def start(update: Update, context: CallbackContext):
@@ -100,15 +101,16 @@ def ask_which_span_part_to_set(update: Update, context: CallbackContext):
         f'Выбранное время: {start_time}-{end_time}'
     )
     buttons = [
-        [InlineKeyboardButton('Начало периода', callback_data='SET_START_TIME')],
+        [
+            InlineKeyboardButton(
+                'Начало периода', callback_data='SET_START_TIME'
+            )
+        ],
         [InlineKeyboardButton('Конец периода', callback_data='SET_END_TIME')],
         [InlineKeyboardButton('Вернуться', callback_data='RETURN')],
     ]
     keyboard = InlineKeyboardMarkup(buttons)
-    update.callback_query.message.edit_caption(
-        caption,
-        reply_markup=keyboard
-    )
+    update.callback_query.message.edit_caption(caption, reply_markup=keyboard)
     return 'SELECTING_WHAT_PART_TO_CHANGE'
 
 
@@ -126,10 +128,7 @@ def select_hour(update: Update, context: CallbackContext):
         for timeslot in TIMESLOTS
     ]
     keyboard = InlineKeyboardMarkup(buttons)
-    update.callback_query.message.edit_caption(
-        caption,
-        reply_markup=keyboard
-    )
+    update.callback_query.message.edit_caption(caption, reply_markup=keyboard)
 
     result = {
         'SET_START_TIME': 'SELECTING_START_HOUR',
@@ -190,14 +189,17 @@ def finish_conversation(update: Update, context: CallbackContext):
     return ConversationHandler.END
 
 
-
 def main():
     tg_bot_token = settings.TG_BOT_TOKEN
     updater = Updater(token=tg_bot_token)
     dispatcher = updater.dispatcher
 
     time_setting_handler = ConversationHandler(
-        entry_points=[CallbackQueryHandler(ask_which_span_part_to_set, pattern='^SET_SPAN$')],
+        entry_points=[
+            CallbackQueryHandler(
+                ask_which_span_part_to_set, pattern='^SET_SPAN$'
+            )
+        ],
         states={
             'SELECTING_WHAT_PART_TO_CHANGE': [
                 CallbackQueryHandler(go_back, pattern='^RETURN$'),
@@ -206,26 +208,22 @@ def main():
             'SELECTING_START_HOUR': [
                 CallbackQueryHandler(set_chosen_start_hour)
             ],
-            'SELECTING_END_HOUR': [
-                CallbackQueryHandler(set_chosen_end_hour)
-            ],
+            'SELECTING_END_HOUR': [CallbackQueryHandler(set_chosen_end_hour)],
         },
         fallbacks=[],
         map_to_parent={
             ConversationHandler.END: 'SELECTING_OPTION',
-        }
+        },
     )
 
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler('start', start)],
         states={
-            'EXPECTING_CONTINUATION': [
-                CallbackQueryHandler(show_time_view)
-            ],
+            'EXPECTING_CONTINUATION': [CallbackQueryHandler(show_time_view)],
             'SELECTING_OPTION': [
                 time_setting_handler,
-                CallbackQueryHandler(finish_conversation)
-            ]
+                CallbackQueryHandler(finish_conversation),
+            ],
         },
         fallbacks=[],
     )
