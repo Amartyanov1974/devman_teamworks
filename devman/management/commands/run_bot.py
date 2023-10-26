@@ -1,3 +1,5 @@
+from datetime import time
+
 from django.core.management import BaseCommand
 from django.conf import settings
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
@@ -9,19 +11,22 @@ from telegram.ext import (
     CallbackContext,
 )
 
+from devman.models import Student
+
 
 TIMESLOTS = [
-    '17:00',
-    '18:00',
-    '19:00',
-    '20:00',
-    '21:00',
+    '16',
+    '17',
+    '18',
+    '19',
+    '20',
+    '21',
 ]
 
 
 def start(update: Update, context: CallbackContext):
-    context.user_data['start_time'] = '16:00'
-    context.user_data['end_time'] = '21:00'
+    context.user_data['start_time'] = TIMESLOTS[0]
+    context.user_data['end_time'] = TIMESLOTS[-1]
     text = (
         'Привет, наступает пора командных проектов. '
         'Будет вместо учебного плана. '
@@ -35,7 +40,7 @@ def start(update: Update, context: CallbackContext):
         'iStock-516797126.jpg'
     )
     button = InlineKeyboardButton(
-        text='Задать временной интервал', callback_data='SHOW_TIME_VIEW'
+        text='Указать временные возможности', callback_data='SHOW_TIME_VIEW'
     )
     keyboard = InlineKeyboardMarkup([[button]])
     update.message.reply_photo(picture, text, reply_markup=keyboard)
@@ -54,8 +59,8 @@ def show_time_view(update: Update, context: CallbackContext):
     start_time = context.user_data.get('start_time')
     end_time = context.user_data.get('end_time')
     caption = (
-        'Выберите удобное время для созвонов\n'
-        f'Выбранное время: {start_time}-{end_time}'
+        'Выберите удобное время для созвонов.\n'
+        f'Выбранное время: {start_time}-{end_time}.'
     )
     buttons = [
         [InlineKeyboardButton('Изменить', callback_data='SET_SPAN')],
@@ -177,7 +182,7 @@ def finish_conversation(update: Update, context: CallbackContext):
         'w2000/2021/08/chris-ried-ieic5Tq8YMk-unsplash.jpg'
     )
     caption = (
-        'Диапазон доступности принят.\n'
+        'Временные возможности приняты.\n'
         'В воскресенье пришлем Вам детали проекта'
     )
 
@@ -186,10 +191,21 @@ def finish_conversation(update: Update, context: CallbackContext):
         caption,
     )
 
+    chat_id = update.callback_query.from_user.id
+    student = Student.objects.get(tg_account=chat_id)
+    star_hour = int(context.user_data['start_time'])
+    end_hour = int(context.user_data['end_time'])
+    student.start_time = time(hour=star_hour)
+    student.end_time = time(hour=end_hour)
+
+    student.save()
+
     return ConversationHandler.END
 
 
 def main():
+    # django.setup()
+
     tg_bot_token = settings.TG_BOT_TOKEN
     updater = Updater(token=tg_bot_token)
     dispatcher = updater.dispatcher
