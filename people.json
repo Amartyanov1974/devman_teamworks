@@ -4,9 +4,9 @@
             {
                 "name": "Егор Дуняхин",
                 "tg_account": "@dunyakhin_on_air",
-                "trello_account": "@egordunyakhin",
+                "trello_account": "egordunyakhin",
                 "chat_id": 0,
-                "trello_id": " "
+                "trello_id": "6271909c5d6949723d92bc6a"
             }
         ],
     "students":
@@ -14,26 +14,26 @@
             {
                 "name": "Ярослав Ворошилов",
                 "tg_account": "@frqhero",
-                "trello_account": "@frqhero",
+                "trello_account": "frqhero",
                 "level": "june",
                 "chat_id": 275826730,
-                "trello_id": " "
+                "trello_id": "5e3b0b1d4c48ee529280a513"
             },
             {
                 "name": "Роман Рвачёв",
                 "tg_account": "@roma_rvv",
-                "trello_account": "@user80963179",
+                "trello_account": "user80963179",
                 "level": "june",
                 "chat_id": 442620250,
-                "trello_id": " "
+                "trello_id": "648f12a6d9a32892d5774088"
             },
             {
                 "name": "Александр Мартьянов",
                 "tg_account": "@Alexander_Martianov",
-                "trello_account": "@alexander_martianov",
+                "trello_account": "alexander_martianov",
                 "level": "june",
                 "chat_id": 411157618,
-                "trello_id": " "
+                "trello_id": "6468ca9fc3e370cc081bbf2a"
             }
         ]
 }
