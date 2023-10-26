@@ -18,6 +18,10 @@ class ProjectManager(models.Model):
     chat_id = models.IntegerField(verbose_name='ChatID пользователя',
                                   blank=True,
                                   null=True)
+    trello_id = models.CharField(verbose_name='TrelloID пользователя',
+                                 max_length=30,
+                                 blank=True,
+                                 null=True)
 
 
     def __str__(self) -> str:
@@ -43,6 +47,10 @@ class TeamWork(models.Model):
     end_time = models.TimeField(verbose_name='Конец диапазона',
                                 default=time(19,20),
                                 db_index=True)
+    trello_url = models.URLField(verbose_name='Ссылка на доску в Trello',
+                                 max_length=200,
+                                 blank=True,
+                                 null=True)
     discord_link = models.TextField(blank=True, verbose_name="Ссылка приглашение на дискорд сервер")
 
     def __str__(self) -> str:
@@ -86,6 +94,11 @@ class Student(models.Model):
     chat_id = models.IntegerField(verbose_name='ChatID пользователя',
                                   blank=True,
                                   null=True)
+    trello_id = models.CharField(verbose_name='TrelloID пользователя',
+                                  max_length=30,
+                                  blank=True,
+                                  null=True)
+
 
     def __str__(self) -> str:
         return str(self.name)
