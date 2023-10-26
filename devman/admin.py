@@ -1,6 +1,11 @@
 from django.contrib import admin
-from devman.models import Student, ProjectManager
+from devman.models import Student, ProjectManager, TeamWork
 
+
+
+class StudentInline(admin.TabularInline):
+    model = Student
+    extra = 0
 
 @admin.register(Student)
 class ClientAdmin(admin.ModelAdmin):
@@ -8,5 +13,13 @@ class ClientAdmin(admin.ModelAdmin):
 
 
 @admin.register(ProjectManager)
-class Project_managerAdmin(admin.ModelAdmin):
+class ProjectManagerAdmin(admin.ModelAdmin):
     list_display = ['name', 'tg_account']
+
+
+@admin.register(TeamWork)
+class TeamWorkAdmin(admin.ModelAdmin):
+    list_display = ['project_manager', 'start_time', 'end_time']
+    inlines = [
+        StudentInline,
+    ]

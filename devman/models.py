@@ -9,6 +9,51 @@ LEVEL_CHOICES = [
 ]
 
 
+class ProjectManager(models.Model):
+    name = models.CharField(verbose_name='Имя', max_length=20)
+    tg_account = models.CharField(verbose_name='Телеграм-аккаунт',
+                                  max_length=20)
+    trello_account = models.CharField(verbose_name='Трелло-аккаунт',
+                                      max_length=20)
+    chat_id = models.IntegerField(verbose_name='ChatID пользователя',
+                                  blank=True,
+                                  null=True)
+
+
+    def __str__(self) -> str:
+        return str(self.name)
+
+    class Meta:
+        verbose_name = 'Проект-менеджер'
+        verbose_name_plural = 'Проект-менеджеры'
+
+
+class TeamWork(models.Model):
+    project_manager = models.OneToOneField(ProjectManager,
+                                    verbose_name='Проект-менеджер',
+                                    on_delete=models.SET_DEFAULT,
+                                    related_name='teamwork',
+                                    default=None,
+                                    blank=True,
+                                    null=True)
+    start_time = models.TimeField(verbose_name='Начало диапазона',
+                                  default=time(19,00),
+                                  db_index=True)
+    end_time = models.TimeField(verbose_name='Конец диапазона',
+                                default=time(19,20),
+                                db_index=True)
+
+    def __str__(self) -> str:
+        return str(f'{self.project_manager} {self.start_time} {self.end_time}')
+
+    class Meta:
+        verbose_name = 'Группа проекта'
+        verbose_name_plural = 'Группы проекта'
+        unique_together = [
+            ['project_manager', 'start_time', 'end_time']
+        ]
+
+
 class Student(models.Model):
     name = models.CharField(verbose_name='Имя', max_length=20)
     level = models.CharField(max_length=10,
@@ -24,11 +69,21 @@ class Student(models.Model):
     far_east = models.BooleanField(verbose_name='С Дальнего Востока',
                                   default=False)
     start_time = models.TimeField(verbose_name='Начало диапазона',
-                                 default=time(8,00),
-                                 db_index=True)
+                                  default=time(8,00),
+                                  db_index=True)
     end_time = models.TimeField(verbose_name='Конец диапазона',
-                                 default=time(20,00),
-                                 db_index=True)
+                                default=time(20,00),
+                                db_index=True)
+    teamwork = models.ForeignKey(TeamWork,
+                                 verbose_name='Группа проекта',
+                                 on_delete=models.SET_DEFAULT,
+                                 related_name='teamwork',
+                                 default=None,
+                                 blank=True,
+                                 null=True)
+    chat_id = models.IntegerField(verbose_name='ChatID пользователя',
+                                  blank=True,
+                                  null=True)
 
     def __str__(self) -> str:
         return str(self.name)
@@ -38,16 +93,3 @@ class Student(models.Model):
         verbose_name_plural = 'Cтуденты'
 
 
-class ProjectManager(models.Model):
-    name = models.CharField(verbose_name='Имя', max_length=20)
-    tg_account = models.CharField(verbose_name='Телеграм-аккаунт',
-                                  max_length=20)
-    trello_account = models.CharField(verbose_name='Трелло-аккаунт',
-                                      max_length=20)
-
-    def __str__(self) -> str:
-        return str(self.name)
-
-    class Meta:
-        verbose_name = 'Проект-менеджер'
-        verbose_name_plural = 'Проект-менеджеры'
