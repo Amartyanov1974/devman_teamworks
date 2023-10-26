@@ -29,10 +29,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env('SECRET_KEY', 'replace_me')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env.bool('DEBUG', False)
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', ['127.0.0.1', 'localhost'])
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Application definition
 
 INSTALLED_APPS = [
@@ -132,4 +132,3 @@ TG_BOT_TOKEN = env('TG_BOT_TOKEN')
 DISCORD_BOT_TOKEN = env('DISCORD_BOT_TOKEN')
 TRELLO_API_KEY = env.str('TRELLO_API_KEY')
 TRELLO_API_TOKEN = env.str('TRELLO_API_TOKEN')
-
