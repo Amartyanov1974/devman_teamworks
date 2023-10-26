@@ -1,4 +1,3 @@
-import django
 from django.conf import settings
 from django.core.management import BaseCommand
 from telegram import Bot
@@ -7,8 +6,6 @@ from devman.models import Student
 
 
 def main():
-    django.setup()
-
     tg_bot_token = settings.TG_BOT_TOKEN
     bot = Bot(token=tg_bot_token)
 
