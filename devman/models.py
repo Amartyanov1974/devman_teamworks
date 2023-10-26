@@ -36,12 +36,14 @@ class TeamWork(models.Model):
                                     default=None,
                                     blank=True,
                                     null=True)
+
     start_time = models.TimeField(verbose_name='Начало диапазона',
                                   default=time(19,00),
                                   db_index=True)
     end_time = models.TimeField(verbose_name='Конец диапазона',
                                 default=time(19,20),
                                 db_index=True)
+    discord_link = models.TextField(blank=True, verbose_name="Ссылка приглашение на дискорд сервер")
 
     def __str__(self) -> str:
         return str(f'{self.project_manager} {self.start_time} {self.end_time}')

@@ -11,9 +11,26 @@ class Command(BaseCommand):
         intents = discord.Intents.all()
         bot = commands.Bot(command_prefix='!', intents=intents)
         token = settings.DISCORD_BOT_TOKEN
-        groups = []
+        groups = {}
+        discord_invites = []
         for group in TeamWork.objects.all():
-            groups.append(group.project_manager)
+
+            students = []
+            for student in group.teamwork.all():
+                students.append(student.name)
+
+            try:
+                groups[group.id] = {'project_manager': group.project_manager.name,
+                                    'student_1': students[0],
+                                    'student_2': students[1],
+                                    'student_3': students[2]
+                                    }
+            except IndexError:
+                groups[group.id] = {'project_manager': group.project_manager.name,
+                                    'student_1': students[0],
+                                    'student_2': students[1],
+                                    'student_3': None
+                                    }
 
         @bot.event
         async def on_ready():
@@ -34,15 +51,19 @@ class Command(BaseCommand):
                 for text_channel in guild.text_channels:
                     await text_channel.delete()
 
-                for group in groups:
-                    category_name = f'Группа: ПМ - {group}'
+                for group_number in groups:
+                    category_name = f'Группа {group_number}: ПМ - {groups[group_number]["project_manager"]} Студенты - {groups[group_number]["student_1"]}, {groups[group_number]["student_2"]}, {groups[group_number]["student_3"]}'
                     overwrites = {
                         guild.default_role: discord.PermissionOverwrite(read_messages=False),
                         guild.me: discord.PermissionOverwrite(read_messages=True)
                     }
                     voice_category = await guild.create_category(category_name, overwrites=overwrites)
-                    await guild.create_voice_channel(f'Голосовой канал', category=voice_category)
+                    voice_channel = await guild.create_voice_channel(f'Голосовой канал', category=voice_category)
+                    discord_invite = await voice_channel.create_invite(max_age=0, max_uses=0)
+                    discord_invites.append(discord_invite.url)
+
                     await guild.create_text_channel(f'Текстовый канал', category=voice_category)
+        print(discord_invites)
 
         bot.run(token)
 

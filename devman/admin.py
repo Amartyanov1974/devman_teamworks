@@ -1,11 +1,12 @@
 from django.contrib import admin
 from devman.models import Student, ProjectManager, TeamWork
-
+from django.core.management import call_command
 
 
 class StudentInline(admin.TabularInline):
     model = Student
     extra = 0
+
 
 @admin.register(Student)
 class ClientAdmin(admin.ModelAdmin):
@@ -23,3 +24,11 @@ class TeamWorkAdmin(admin.ModelAdmin):
     inlines = [
         StudentInline,
     ]
+    actions = ['run_custom_command']
+
+    def run_custom_command(self, request, queryset):
+        call_command('discord')
+        self.message_user(request, 'Команда успешно выполнена')
+
+    run_custom_command.short_description = 'Генерация групп в дискорд сервере'
+
