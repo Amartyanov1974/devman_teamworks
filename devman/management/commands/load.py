@@ -18,13 +18,17 @@ class Command(BaseCommand):
                 name=stud['name'],
                 defaults={'tg_account': stud['tg_account'],
                           'trello_account': stud['trello_account'],
-                          'level': stud['level']})
+                          'level': stud['level'],
+                          'chat_id': stud['chat_id'],
+                          'trello_id': stud['trello_id']})
             print(student, created)
         for proj_manager in data['project_managers']:
             project_manager, created = ProjectManager.objects.update_or_create(
                 name=proj_manager['name'],
                 defaults={'tg_account': proj_manager['tg_account'],
-                          'trello_account': proj_manager['trello_account']})
+                          'trello_account': proj_manager['trello_account'],
+                          'chat_id': proj_manager['chat_id'],
+                          'trello_id': proj_manager['trello_id']})
             print(project_manager, created)
 
         # Временная часть, создаем группу для дальнейшего создания в discord и trello

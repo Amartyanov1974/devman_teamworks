@@ -18,6 +18,10 @@ class ProjectManager(models.Model):
     chat_id = models.IntegerField(verbose_name='ChatID пользователя',
                                   blank=True,
                                   null=True)
+    trello_id = models.CharField(verbose_name='TrelloID пользователя',
+                                  max_length=30,
+                                  blank=True,
+                                  null=True)
 
 
     def __str__(self) -> str:
@@ -88,6 +92,11 @@ class Student(models.Model):
     chat_id = models.IntegerField(verbose_name='ChatID пользователя',
                                   blank=True,
                                   null=True)
+    trello_id = models.CharField(verbose_name='TrelloID пользователя',
+                                  max_length=30,
+                                  blank=True,
+                                  null=True)
+
 
     def __str__(self) -> str:
         return str(self.name)
