@@ -42,6 +42,10 @@ class TeamWork(models.Model):
     end_time = models.TimeField(verbose_name='Конец диапазона',
                                 default=time(19,20),
                                 db_index=True)
+    trello_url = models.URLField(verbose_name='Ссылка на доску в Trello',
+                                 max_length=200,
+                                 blank=True,
+                                 null=True)
 
     def __str__(self) -> str:
         return str(f'{self.project_manager} {self.start_time} {self.end_time}')
