@@ -1,6 +1,6 @@
 from django.db import models
 from datetime import time
-
+import asyncio
 
 LEVEL_CHOICES = [
     ('june', 'june'),
@@ -19,9 +19,9 @@ class ProjectManager(models.Model):
                                   blank=True,
                                   null=True)
     trello_id = models.CharField(verbose_name='TrelloID пользователя',
-                                  max_length=30,
-                                  blank=True,
-                                  null=True)
+                                 max_length=30,
+                                 blank=True,
+                                 null=True)
 
 
     def __str__(self) -> str:
@@ -34,12 +34,13 @@ class ProjectManager(models.Model):
 
 class TeamWork(models.Model):
     project_manager = models.OneToOneField(ProjectManager,
-                                    verbose_name='Проект-менеджер',
-                                    on_delete=models.SET_DEFAULT,
-                                    related_name='teamwork',
-                                    default=None,
-                                    blank=True,
-                                    null=True)
+                                            verbose_name='Проект-менеджер',
+                                            on_delete=models.SET_DEFAULT,
+                                            related_name='teamwork',
+                                            default=None,
+                                            blank=True,
+                                            null=True)
+
     start_time = models.TimeField(verbose_name='Начало диапазона',
                                   default=time(19,00),
                                   db_index=True)
@@ -50,6 +51,11 @@ class TeamWork(models.Model):
                                  max_length=200,
                                  blank=True,
                                  null=True)
+    discord_link = models.URLField(blank=True,
+                                   null=True,
+                                   verbose_name="Ссылка приглашение на дискорд сервер",
+                                   max_length=200)
+
 
     def __str__(self) -> str:
         return str(f'{self.project_manager} {self.start_time} {self.end_time}')

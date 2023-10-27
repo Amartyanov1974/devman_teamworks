@@ -18,3 +18,6 @@
 
 `TRELLO_API_KEY`- API ключ к рабочему пространству. <br>
 `TRELLO_API_TOKEN` - Токен к рабочему пространству. <br>
+
+### Переменные окружения для Discord бота
+`DISCORD_BOT_TOKEN` - Токен к discord боту([инструкция по получению токена и создания Discord сервера.](https://appmaster.io/ru/blog/bot-discord-kak-sozdat-i-dobavit-na-server) <br>
