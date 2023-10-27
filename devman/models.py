@@ -91,7 +91,7 @@ class Student(models.Model):
     teamwork = models.ForeignKey(TeamWork,
                                  verbose_name='Группа проекта',
                                  on_delete=models.SET_DEFAULT,
-                                 related_name='teamwork',
+                                 related_name='student',
                                  default=None,
                                  blank=True,
                                  null=True)

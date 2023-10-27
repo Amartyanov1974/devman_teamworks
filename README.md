@@ -17,5 +17,4 @@
 После создания рабочего пространства в [Trello](https://trello.com) cоздаем ключи и токен по [этой инструкции](https://developer.atlassian.com/cloud/trello/guides/rest-api/api-introduction/)
 
 `TRELLO_API_KEY`- API ключ к рабочему пространству. <br>
-`TRELLO_API_SECRET` - Секретный API ключ к рабочему пространству. <br>
 `TRELLO_API_TOKEN` - Токен к рабочему пространству. <br>
