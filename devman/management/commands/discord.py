@@ -39,7 +39,7 @@ class Command(BaseCommand):
             for guild in bot.guilds:
                 current_month = datetime.datetime.now().strftime('%B')
 
-                new_guild_name = f'Сервер - {current_month}'
+                new_guild_name = f'Project.{current_month}'
                 await guild.edit(name=new_guild_name)
 
                 for category in guild.categories:
@@ -63,6 +63,9 @@ class Command(BaseCommand):
                     discord_invites.append(discord_invite.url)
 
                     await guild.create_text_channel(f'Текстовый канал', category=voice_category)
+                    print(TeamWork.objects.get(id=1)) # Ошибка django.core.exceptions.SynchronousOnlyOperation: You cannot call this from an async context - use a thread or sync_to_async.
+            await bot.close()
+
         print(discord_invites)
 
         bot.run(token)

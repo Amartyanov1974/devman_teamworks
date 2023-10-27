@@ -34,12 +34,12 @@ class ProjectManager(models.Model):
 
 class TeamWork(models.Model):
     project_manager = models.OneToOneField(ProjectManager,
-                                    verbose_name='Проект-менеджер',
-                                    on_delete=models.SET_DEFAULT,
-                                    related_name='teamwork',
-                                    default=None,
-                                    blank=True,
-                                    null=True)
+                                            verbose_name='Проект-менеджер',
+                                            on_delete=models.SET_DEFAULT,
+                                            related_name='teamwork',
+                                            default=None,
+                                            blank=True,
+                                            null=True)
 
     start_time = models.TimeField(verbose_name='Начало диапазона',
                                   default=time(19,00),
