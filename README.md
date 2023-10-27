@@ -19,5 +19,8 @@
 `TRELLO_API_KEY`- API ключ к рабочему пространству. <br>
 `TRELLO_API_TOKEN` - Токен к рабочему пространству. <br>
 
+Команда генерации рабочих досок в Trello для сформированных рабочих групп:<br>
+```python3 ./manage.py gen_trello```
+
 ### Переменные окружения для Discord бота
 `DISCORD_BOT_TOKEN` - Токен к discord боту([инструкция по получению токена и создания Discord сервера.](https://appmaster.io/ru/blog/bot-discord-kak-sozdat-i-dobavit-na-server) <br>
