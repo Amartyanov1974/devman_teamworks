@@ -15,7 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from devman import actions
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('gen_stud/',actions.gen_stud, name='gen_stud'),
+    path('upload_stud/',actions.upload_stud, name='upload_stud'),
+    path('upload_pm/',actions.upload_pm, name='upload_pm'),
+    path('gen_trello/',actions.gen_trello, name='gen_trello'),
+    path('create_teamworks/',actions.create_teamworks, name='create_teamworks')
 ]

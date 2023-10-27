@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<body>
+<form action="./" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <p ><input type="file" name="file"></p>
+    <p ><button type="submit">Отправить</button></p>
+</form>
+</body>
+
+</html>

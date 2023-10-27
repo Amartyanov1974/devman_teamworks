@@ -1,0 +1,12 @@
+{% extends 'admin/change_list.html' %}
+  {% block object-tools %}
+    <div style="display: flex; flex-direction: row;">
+      <div style="margin: 5px 5px 5px 5px">
+        <form action="{% url 'upload_pm' %}" method="POST">
+          {% csrf_token %}
+          <input type="submit" value="Загрузка проект-менеджеров" />
+        </form>
+      </div>
+    </div>
+  {{ block.super }}
+{% endblock %}

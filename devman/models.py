@@ -22,6 +22,10 @@ class ProjectManager(models.Model):
                                  max_length=30,
                                  blank=True,
                                  null=True)
+    trello_id = models.CharField(verbose_name='TrelloID пользователя',
+                                 max_length=30,
+                                 blank=True,
+                                 null=True)
 
 
     def __str__(self) -> str:
@@ -110,5 +114,3 @@ class Student(models.Model):
     class Meta:
         verbose_name = 'Студент'
         verbose_name_plural = 'Cтуденты'
-
-
