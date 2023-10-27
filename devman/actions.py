@@ -175,3 +175,4 @@ def gen_trello(request):
             print(pm_trello_account)
             trello_id = get_member_trelloid(pm_trello_account)
             add_member(board_id, trello_id)
+    return redirect('/admin/devman/teamwork/')
