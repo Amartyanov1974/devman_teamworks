@@ -22,7 +22,7 @@ class ProjectManagerAdmin(admin.ModelAdmin):
 
 @admin.register(TeamWork)
 class TeamWorkAdmin(admin.ModelAdmin):
-    list_display = ['project_manager', 'start_time', 'end_time']
+    list_display = ['project_manager', 'start_time', 'end_time', 'trello_url', 'discord_link']
     inlines = [
         StudentInline,
     ]

@@ -22,8 +22,12 @@ class ProjectManager(models.Model):
                                  max_length=30,
                                  blank=True,
                                  null=True)
-    trello_id = models.CharField(verbose_name='TrelloID пользователя',
-                                 max_length=30,
+    trello_key = models.CharField(verbose_name='Trello-key',
+                                 max_length=90,
+                                 blank=True,
+                                 null=True)
+    trello_token = models.CharField(verbose_name='Trello-token',
+                                 max_length=90,
                                  blank=True,
                                  null=True)
 
@@ -45,10 +49,10 @@ class TeamWork(models.Model):
                                             blank=True,
                                             null=True)
 
-    start_time = models.TimeField(verbose_name='Начало диапазона',
+    start_time = models.TimeField(verbose_name='Начало созвона',
                                   default=time(19,00),
                                   db_index=True)
-    end_time = models.TimeField(verbose_name='Конец диапазона',
+    end_time = models.TimeField(verbose_name='Окончание созвона',
                                 default=time(19,20),
                                 db_index=True)
     trello_url = models.URLField(verbose_name='Ссылка на доску в Trello',
