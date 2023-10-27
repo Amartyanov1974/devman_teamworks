@@ -1,6 +1,6 @@
 from django.db import models
 from datetime import time
-
+import asyncio
 
 LEVEL_CHOICES = [
     ('june', 'june'),
@@ -51,7 +51,11 @@ class TeamWork(models.Model):
                                  max_length=200,
                                  blank=True,
                                  null=True)
-    discord_link = models.TextField(blank=True, verbose_name="Ссылка приглашение на дискорд сервер")
+    discord_link = models.URLField(blank=True,
+                                   null=True,
+                                   verbose_name="Ссылка приглашение на дискорд сервер",
+                                   max_length=200)
+
 
     def __str__(self) -> str:
         return str(f'{self.project_manager} {self.start_time} {self.end_time}')

@@ -4,6 +4,7 @@ import datetime
 from django.core.management.base import BaseCommand
 from django.conf import settings
 from devman.models import TeamWork
+from asgiref.sync import async_to_sync
 
 
 class Command(BaseCommand):
@@ -12,7 +13,7 @@ class Command(BaseCommand):
         bot = commands.Bot(command_prefix='!', intents=intents)
         token = settings.DISCORD_BOT_TOKEN
         groups = {}
-        discord_invites = []
+        discord_invites = {}
         for group in TeamWork.objects.all():
 
             students = []
@@ -60,13 +61,14 @@ class Command(BaseCommand):
                     voice_category = await guild.create_category(category_name, overwrites=overwrites)
                     voice_channel = await guild.create_voice_channel(f'Голосовой канал', category=voice_category)
                     discord_invite = await voice_channel.create_invite(max_age=0, max_uses=0)
-                    discord_invites.append(discord_invite.url)
+
+                    discord_invites[group_number] = discord_invite.url
 
                     await guild.create_text_channel(f'Текстовый канал', category=voice_category)
-                    print(TeamWork.objects.get(id=1)) # Ошибка django.core.exceptions.SynchronousOnlyOperation: You cannot call this from an async context - use a thread or sync_to_async.
-            await bot.close()
 
+            await bot.close()
+        bot.run(token)
         print(discord_invites)
 
-        bot.run(token)
-
+        for group_number, invite_url in discord_invites.items():
+            TeamWork.objects.filter(id=group_number).update(discord_link=invite_url)
