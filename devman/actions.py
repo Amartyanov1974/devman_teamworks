@@ -88,8 +88,10 @@ def upload_pm(request):
     return render(request, 'upload.html', {'form': form})
 
 
-def create_teamworks(request):
-    # Временная часть, создаем группу для дальнейшего создания в discord и trello
+def create_teamworks(request): # Тут будет функция формирования групп
+    # Временная часть, создаем группу для отработки создания в discord и trello
+
+
     proj_manager = ProjectManager.objects.first()
     print(proj_manager, proj_manager.tg_account, proj_manager.trello_account)
     teamwork, created = TeamWork.objects.update_or_create(
@@ -176,11 +178,6 @@ def gen_trello(request):
             if student.trello_id:
                 print(board_id, student.trello_id, trello_api_key, trello_api_token)
                 add_member(board_id, student.trello_id, trello_api_key, trello_api_token)
-        # pm_trello_account = teamwork.project_manager.trello_account
-        # if pm_trello_account:
-            # print(pm_trello_account)
-            # trello_id = get_member_trelloid(pm_trello_account)
-            # add_member(board_id, trello_id)
     return redirect('/admin/devman/teamwork/')
 
 
@@ -189,5 +186,7 @@ def redir(request):
 
 
 def gen_discord(request):
-    call_command('discord')
-    return redirect('/admin/devman/teamwork/')
+    try:
+        call_command('discord')
+    finally:
+        return redirect('/admin/devman/teamwork/')
