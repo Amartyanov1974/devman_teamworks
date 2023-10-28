@@ -182,7 +182,7 @@ def finish_conversation(update: Update, context: CallbackContext):
 
 
     try:
-        student = Student.objects.get(chat_id=111)
+        student = Student.objects.get(chat_id=chat_id)
         star_hour = int(context.user_data['start_time'])
         end_hour = int(context.user_data['end_time'])
         student.start_time = time(hour=star_hour)
