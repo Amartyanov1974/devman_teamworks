@@ -7,6 +7,7 @@ from trello import TrelloClient
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.conf import settings
+from django.core.management import call_command
 
 from devman.models import Student, ProjectManager, TeamWork
 from devman.forms import UploadFileForm
@@ -180,4 +181,9 @@ def gen_trello(request):
             # print(pm_trello_account)
             # trello_id = get_member_trelloid(pm_trello_account)
             # add_member(board_id, trello_id)
+    return redirect('/admin/devman/teamwork/')
+
+
+def gen_discord(request):
+    call_command('discord')
     return redirect('/admin/devman/teamwork/')

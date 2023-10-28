@@ -4,7 +4,6 @@ import datetime
 from django.core.management.base import BaseCommand
 from django.conf import settings
 from devman.models import TeamWork
-from asgiref.sync import async_to_sync
 
 
 class Command(BaseCommand):
@@ -17,7 +16,7 @@ class Command(BaseCommand):
         for group in TeamWork.objects.all():
 
             students = []
-            for student in group.teamwork.all():
+            for student in group.student.all():
                 students.append(student.name)
 
             try:

@@ -14,7 +14,7 @@
         </form>
       </div>
       <div style="margin: 5px 5px 5px 5px">
-        <form action="" method="POST">
+        <form action="{% url 'gen_discord' %}" method="POST">
           {% csrf_token %}
           <input type="submit" value="Создать Discord группы" />
         </form>
