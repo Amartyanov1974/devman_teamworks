@@ -28,7 +28,9 @@ class Command(BaseCommand):
                 defaults={'tg_account': proj_manager['tg_account'],
                           'trello_account': proj_manager['trello_account'],
                           'chat_id': proj_manager['chat_id'],
-                          'trello_id': proj_manager['trello_id']})
+                          'trello_id': proj_manager['trello_id'],
+                          'trello_key': proj_manager['trello_key'],
+                          'trello_token': proj_manager['trello_token']})
             print(project_manager, created)
 
         # Временная часть, создаем группу для дальнейшего создания в discord и trello

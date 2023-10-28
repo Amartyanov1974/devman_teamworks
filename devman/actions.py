@@ -53,7 +53,9 @@ def save_pm(json_file):
             defaults={'tg_account': proj_manager['tg_account'],
                       'trello_account': proj_manager['trello_account'],
                       'chat_id': proj_manager['chat_id'],
-                      'trello_id': proj_manager['trello_id']})
+                      'trello_id': proj_manager['trello_id'],
+                      'trello_key': proj_manager['trello_key'],
+                      'trello_token': proj_manager['trello_token']})
         print(project_manager, created)
 
 
@@ -101,21 +103,21 @@ def create_teamworks(request):
     return redirect('/admin/devman/teamwork/')
 
 
-def add_member(board_id, member_id):
+def add_member(board_id, member_id, trello_api_key, trello_api_token):
 
     url = f'https://api.trello.com/1/boards/{board_id}/members/{member_id}'
     user_type = 'normal'
     query = {
       'type': user_type,
-      'key': settings.TRELLO_API_KEY,
-      'token': settings.TRELLO_API_TOKEN
+      'key': trello_api_key,
+      'token': trello_api_token
     }
 
     response = requests.request('PUT', url, params=query)
     # response.raise_for_status()
 
 
-def get_member_trelloid(trello_account):
+def get_member_trelloid(trello_account, trello_api_key, trello_api_token):
 
     url = f'https://api.trello.com/1/members/{trello_account}'
 
@@ -124,8 +126,8 @@ def get_member_trelloid(trello_account):
     }
 
     query = {
-      'key': settings.TRELLO_API_KEY,
-      'token': settings.TRELLO_API_TOKEN
+      'key': trello_api_key,
+      'token': trello_api_token
     }
 
     response = requests.request(
@@ -150,10 +152,12 @@ def gen_trello(request):
         for student in team_students:
             students.append(student.name)
         name = f'{teamwork.start_time} - {teamwork.end_time}: ПМ {teamwork.project_manager.name}, студенты: {students}'
+        trello_api_key = teamwork.project_manager.trello_key
+        trello_api_token = teamwork.project_manager.trello_token
         query = {
-          'name': name,
-          'key': settings.TRELLO_API_KEY,
-          'token': settings.TRELLO_API_TOKEN
+            'name': name,
+            'key': trello_api_key,
+            'token': trello_api_token
         }
 
         response = requests.request('POST', url, params=query)
@@ -165,14 +169,15 @@ def gen_trello(request):
         for student in team_students:
             if  student.trello_account and not student.trello_id:
                 print(student.trello_account)
-                trello_id = get_member_trelloid(student.trello_account)
+                trello_id = get_member_trelloid(student.trello_account, trello_api_key, trello_api_token)
                 student.trello_id = trello_id
                 student.save(update_fields=['trello_id'])
             if student.trello_id:
-                add_member(board_id, student.trello_id)
-        pm_trello_account = teamwork.project_manager.trello_account
-        if pm_trello_account:
-            print(pm_trello_account)
-            trello_id = get_member_trelloid(pm_trello_account)
-            add_member(board_id, trello_id)
+                print(board_id, student.trello_id, trello_api_key, trello_api_token)
+                add_member(board_id, student.trello_id, trello_api_key, trello_api_token)
+        # pm_trello_account = teamwork.project_manager.trello_account
+        # if pm_trello_account:
+            # print(pm_trello_account)
+            # trello_id = get_member_trelloid(pm_trello_account)
+            # add_member(board_id, trello_id)
     return redirect('/admin/devman/teamwork/')

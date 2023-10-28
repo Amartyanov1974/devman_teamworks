@@ -1,0 +1,14 @@
+{
+    "project_managers":
+        [
+            {
+                "name": "Александр Мартьянов",
+                "tg_account": "@Alexander_Martianov",
+                "trello_account": "alexander_martianov",
+                "chat_id": 411157618,
+                "trello_id": "6468ca9fc3e370cc081bbf2a",
+                "trello_key": "e783f9bd700554c7d8ac68acd9c94056",
+                "trello_token": "ATTA05eeb4cfaea7bc6718271db988b0d19cec0a59f919da2b1913dca3a1abb1406c3850197E"
+            }
+        ]
+}
