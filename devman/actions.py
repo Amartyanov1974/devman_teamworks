@@ -172,12 +172,16 @@ def gen_trello(request):
         for student in team_students:
             if  student.trello_account and not student.trello_id:
                 print(student.trello_account)
-                trello_id = get_member_trelloid(student.trello_account, trello_api_key, trello_api_token)
+                trello_id = get_member_trelloid(student.trello_account,
+                                                trello_api_key,
+                                                trello_api_token)
                 student.trello_id = trello_id
                 student.save(update_fields=['trello_id'])
             if student.trello_id:
-                print(board_id, student.trello_id, trello_api_key, trello_api_token)
-                add_member(board_id, student.trello_id, trello_api_key, trello_api_token)
+                print(board_id, student.trello_id,
+                      trello_api_key, trello_api_token)
+                add_member(board_id, student.trello_id,
+                           trello_api_key, trello_api_token)
     return redirect('/admin/devman/teamwork/')
 
 

@@ -50,7 +50,8 @@ def start(update: Update, context: CallbackContext):
 
 def show_time_view(update: Update, context: CallbackContext):
     update.callback_query.answer()
-
+    message_id = update.callback_query.message.message_id
+    chat_id = update.callback_query.from_user.id
     picture = (
         'https://images.theconversation.com/files/401267/original/'
         'file-20210518-13-1a2rmfe.jpg'
@@ -67,6 +68,8 @@ def show_time_view(update: Update, context: CallbackContext):
         [InlineKeyboardButton('Готово', callback_data='CONFIRMATION')],
     ]
     keyboard = InlineKeyboardMarkup(buttons)
+
+    context.bot.delete_message(chat_id=chat_id, message_id=message_id)
     update.callback_query.message.reply_photo(
         picture,
         caption,
@@ -176,10 +179,8 @@ def go_back(update: Update, context: CallbackContext):
 
 def finish_conversation(update: Update, context: CallbackContext):
     update.callback_query.answer()
-
+    message_id = update.callback_query.message.message_id
     chat_id = update.callback_query.from_user.id
-
-
 
     try:
         student = Student.objects.get(chat_id=chat_id)
@@ -195,7 +196,7 @@ def finish_conversation(update: Update, context: CallbackContext):
             'w2000/2021/08/chris-ried-ieic5Tq8YMk-unsplash.jpg'
         )
         caption = (
-            'Временные возможности приняты.\n'
+            f'Временные возможности (с {star_hour} до {end_hour}) приняты.\n'
             'В воскресенье пришлем Вам детали проекта'
         )
     except (Student.DoesNotExist, Student.MultipleObjectsReturned):
@@ -207,7 +208,7 @@ def finish_conversation(update: Update, context: CallbackContext):
             'Что то пошло не так :(\n'
             'Свяжитесь пожалуйста с вашим ментором.'
         )
-
+    context.bot.delete_message(chat_id=chat_id, message_id=message_id)
     update.callback_query.message.reply_photo(
         picture,
         caption,
