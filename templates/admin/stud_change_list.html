@@ -14,9 +14,9 @@
         </form>
       </div>
       <div style="margin: 5px 5px 5px 5px">
-        <form action="" method="POST">
+        <form action="{% url 'ask_students_choose_time' %}" method="POST">
           {% csrf_token %}
-          <input type="submit" value="Запрос временного диапазона" />
+          <input type="submit" value="Запрос временных возможностей" />
         </form>
       </div>
     </div>

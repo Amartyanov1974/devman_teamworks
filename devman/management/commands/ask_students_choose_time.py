@@ -19,7 +19,8 @@ def main():
     )
 
     for student in students:
-        bot.send_message(student.tg_account, text=message)
+        if student.chat_id:
+            bot.send_message(student.chat_id, text=message)
 
 
 class Command(BaseCommand):
