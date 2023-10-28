@@ -6,7 +6,6 @@ from django.conf import settings
 from devman.models import TeamWork
 
 
-
 class Command(BaseCommand):
     def handle(self, *args, **options):
         intents = discord.Intents.all()
@@ -17,7 +16,7 @@ class Command(BaseCommand):
         for group in TeamWork.objects.all():
 
             students = []
-            for student in group.teamwork.all():
+            for student in group.student.all():
                 students.append(student.name)
 
             try:
