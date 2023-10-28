@@ -177,28 +177,41 @@ def go_back(update: Update, context: CallbackContext):
 def finish_conversation(update: Update, context: CallbackContext):
     update.callback_query.answer()
 
-    picture = (
-        'https://www.freecodecamp.org/news/content/images/size/'
-        'w2000/2021/08/chris-ried-ieic5Tq8YMk-unsplash.jpg'
-    )
-    caption = (
-        'Временные возможности приняты.\n'
-        'В воскресенье пришлем Вам детали проекта'
-    )
+    chat_id = update.callback_query.from_user.id
+
+
+
+    try:
+        student = Student.objects.get(chat_id=111)
+        star_hour = int(context.user_data['start_time'])
+        end_hour = int(context.user_data['end_time'])
+        student.start_time = time(hour=star_hour)
+        student.end_time = time(hour=end_hour)
+
+        student.save()
+
+        picture = (
+            'https://www.freecodecamp.org/news/content/images/size/'
+            'w2000/2021/08/chris-ried-ieic5Tq8YMk-unsplash.jpg'
+        )
+        caption = (
+            'Временные возможности приняты.\n'
+            'В воскресенье пришлем Вам детали проекта'
+        )
+    except (Student.DoesNotExist, Student.MultipleObjectsReturned):
+        picture = (
+            'https://t4.ftcdn.net/jpg/03/08/92/49/'
+            '360_F_308924911_jsWAfFOqdSGglzvF7zcNcXIo06eS7Wch.jpg'
+        )
+        caption = (
+            'Что то пошло не так :(\n'
+            'Свяжитесь пожалуйста с вашим ментором.'
+        )
 
     update.callback_query.message.reply_photo(
         picture,
         caption,
     )
-
-    chat_id = update.callback_query.from_user.id
-    student = Student.objects.get(tg_account=chat_id)
-    star_hour = int(context.user_data['start_time'])
-    end_hour = int(context.user_data['end_time'])
-    student.start_time = time(hour=star_hour)
-    student.end_time = time(hour=end_hour)
-
-    student.save()
 
     return ConversationHandler.END
 
