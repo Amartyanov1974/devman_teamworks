@@ -4,7 +4,7 @@ import datetime
 from django.core.management.base import BaseCommand
 from django.conf import settings
 from devman.models import TeamWork
-from asgiref.sync import async_to_sync
+
 
 
 class Command(BaseCommand):
