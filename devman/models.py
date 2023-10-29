@@ -41,13 +41,13 @@ class ProjectManager(models.Model):
 
 
 class TeamWork(models.Model):
-    project_manager = models.OneToOneField(ProjectManager,
-                                            verbose_name='Проект-менеджер',
-                                            on_delete=models.SET_DEFAULT,
-                                            related_name='teamwork',
-                                            default=None,
-                                            blank=True,
-                                            null=True)
+    project_manager = models.ForeignKey(ProjectManager,
+                                        verbose_name='Проект-менеджер',
+                                        on_delete=models.SET_DEFAULT,
+                                        related_name='teamworks',
+                                        default=None,
+                                        blank=True,
+                                        null=True)
 
     start_time = models.TimeField(verbose_name='Начало созвона',
                                   default=time(19,00),
@@ -64,6 +64,10 @@ class TeamWork(models.Model):
                                    verbose_name="Ссылка приглашение на дискорд сервер",
                                    max_length=200)
 
+
+    def number_students(self):
+        return self.students.count()
+    number_students.short_description = 'Количество студентов'
 
     def __str__(self) -> str:
         return str(f'{self.project_manager} {self.start_time} {self.end_time}')
@@ -99,7 +103,7 @@ class Student(models.Model):
     teamwork = models.ForeignKey(TeamWork,
                                  verbose_name='Группа проекта',
                                  on_delete=models.SET_DEFAULT,
-                                 related_name='student',
+                                 related_name='students',
                                  default=None,
                                  blank=True,
                                  null=True)
