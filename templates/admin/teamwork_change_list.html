@@ -1,25 +1,25 @@
 {% extends 'admin/change_list.html' %}
   {% block object-tools %}
-    <div style="display: flex; flex-direction: row;">
-      <div style="margin: 5px 5px 5px 5px">
+    <div style="display: flex; flex-direction: row; flex-wrap: wrap">
+      <div style="margin: 5px 5px 5px 5px;  display: block" >
         <form action="{% url 'create_teamworks' %}" method="POST">
           {% csrf_token %}
             <input type="submit" value="Сформировать группы" />
         </form>
       </div>
-      <div style="margin: 5px 5px 5px 5px">
+      <div style="margin: 5px 5px 5px 5px;  display: block">
         <form action="{% url 'gen_trello' %}" method="POST">
           {% csrf_token %}
           <input type="submit" value="Создать рабочие доски в Trello" />
         </form>
       </div>
-      <div style="margin: 5px 5px 5px 5px">
+      <div style="margin: 5px 5px 5px 5px;  display: block">
         <form action="{% url 'gen_discord' %}" method="POST">
           {% csrf_token %}
           <input type="submit" value="Создать Discord группы" />
         </form>
       </div>
-      <div style="margin: 5px 5px 5px 5px">
+      <div style="margin: 5px 5px 5px 5px;  display: block">
         <form action="" method="POST">
           {% csrf_token %}
           <input type="submit" value="Разослать информацию" />
