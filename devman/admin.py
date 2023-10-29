@@ -1,10 +1,21 @@
 from django.contrib import admin
-from devman.models import Student, ProjectManager, TeamWork
+from devman.models import Student, ProjectManager, TeamWork, TeamWorkCalculation
 from django.core.management import call_command
 
 
 class StudentInline(admin.TabularInline):
     model = Student
+    extra = 0
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+class StudentCalculationInline(admin.TabularInline):
+    model = TeamWorkCalculation.students_candidate.through
+
     extra = 0
 
     def has_change_permission(self, request, obj=None):
@@ -27,7 +38,7 @@ class TeamWorkInline(admin.TabularInline):
 
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
-    list_display = ['name', 'tg_account', 'level','far_east', 'start_time', 'end_time']
+    list_display = ['name', 'teamwork', 'tg_account', 'level', 'start_time', 'end_time', 'far_east']
     change_list_template = "admin/stud_change_list.html"
     readonly_fields = ['chat_id', 'trello_id', ]
     ordering = ('name',)
@@ -51,12 +62,15 @@ class TeamWorkAdmin(admin.ModelAdmin):
         StudentInline,
     ]
     readonly_fields = ['trello_url', 'discord_link']
-    actions = ['run_custom_command']
+
     change_list_template = "admin/teamwork_change_list.html"
     ordering = ('start_time',)
 
-    def run_custom_command(self, request, queryset):
-        call_command('discord')
-        self.message_user(request, 'Команда успешно выполнена')
 
-    run_custom_command.short_description = 'Генерация групп в дискорд сервере'
+@admin.register(TeamWorkCalculation)
+class TeamWorkCalculationAdmin(admin.ModelAdmin):
+    list_display = ['project_manager', 'number_students', 'start_time', 'end_time']
+    inlines = [
+        StudentCalculationInline,
+    ]
+    ordering = ('start_time',)

@@ -79,6 +79,37 @@ class TeamWork(models.Model):
             ['project_manager', 'start_time', 'end_time']
         ]
 
+class TeamWorkCalculation(models.Model):
+    project_manager = models.ForeignKey(ProjectManager,
+                                        verbose_name='Проект-менеджер',
+                                        on_delete=models.SET_DEFAULT,
+                                        related_name='сalculation_teamworks',
+                                        default=None,
+                                        blank=True,
+                                        null=True)
+
+    start_time = models.TimeField(verbose_name='Начало созвона',
+                                  default=time(19,00),
+                                  db_index=True)
+    end_time = models.TimeField(verbose_name='Окончание созвона',
+                                default=time(19,20),
+                                db_index=True)
+
+    @property
+    def number_students(self):
+        return self.students_candidate.count()
+
+
+    def __str__(self) -> str:
+        return str(f'{self.start_time} {self.end_time}')
+
+    class Meta:
+        verbose_name = 'Группа для расчетов'
+        verbose_name_plural = 'Группы для расчетов'
+        unique_together = [
+            ['project_manager', 'start_time', 'end_time']
+        ]
+
 
 class Student(models.Model):
     name = models.CharField(verbose_name='Имя', max_length=20)
@@ -107,6 +138,13 @@ class Student(models.Model):
                                  default=None,
                                  blank=True,
                                  null=True)
+    calculation_teamwork = models.ManyToManyField(TeamWorkCalculation,
+                                                  verbose_name='Группа кандидатов',
+                                                  related_name='students_candidate',
+                                                  default=None,
+                                                  blank=True,
+                                                  null=True)
+
     chat_id = models.IntegerField(verbose_name='ChatID пользователя',
                                   blank=True,
                                   null=True)
@@ -117,7 +155,7 @@ class Student(models.Model):
 
 
     def __str__(self) -> str:
-        return str(self.name)
+        return str(f'{self.name} {self.start_time} {self.end_time}')
 
     class Meta:
         verbose_name = 'Студент'

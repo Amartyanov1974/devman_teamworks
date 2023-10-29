@@ -1,5 +1,5 @@
 import json
-from datetime import time
+from datetime import time, datetime, date
 from random import randint, choice
 import logging
 import requests
@@ -9,20 +9,21 @@ from django.http import HttpResponseRedirect
 from django.conf import settings
 from django.core.management import call_command
 
-from devman.models import Student, ProjectManager, TeamWork
+from devman.models import Student, ProjectManager, TeamWork, TeamWorkCalculation
 from devman.forms import UploadFileForm
+from django.db.models import Q
 
-
-LEVEL_CHOICES = ['june', 'newbie+', 'newbie']
+LEVEL_CHOICES = ['june'] # , 'newbie+', 'newbie']
 
 
 def gen_stud(request):
-    count = 50
+    count = 15
     for number in range(count):
         name = f'student{number}'
         tg_account = f'@{name}'
+        gr_start_time = 21 - int(count/6)
         level=choice(LEVEL_CHOICES)
-        start_time = randint(9, 19)
+        start_time = randint(gr_start_time, 20)
         end_time = randint(start_time + 1, 21)
         start_time = time(start_time, 0)
         end_time = time(end_time, 0)
@@ -88,23 +89,49 @@ def upload_pm(request):
     return render(request, 'upload.html', {'form': form})
 
 
-def create_teamworks(request): # Тут будет функция формирования групп
-    # Временная часть, создаем группу для отработки создания в discord и trello
+def create_teamworks(request):
 
+    students = Student.objects.all()
+    try:
+        min_time = students.filter().order_by('start_time')[0].start_time
+        max_time = students.filter().order_by('-end_time')[0].end_time
+        delta_time = datetime.combine(date.min, time(0, 20)) - datetime.min
+    except:
+        return redirect('/admin/devman/student/')
+    while min_time != max_time:
 
-    proj_manager = ProjectManager.objects.first()
-    print(proj_manager, proj_manager.tg_account, proj_manager.trello_account)
-    teamwork, created = TeamWork.objects.update_or_create(
-        project_manager=proj_manager)
-    print(teamwork, created)
-    students = Student.objects.all()[:3]
-    if created:
-        for student in students:
-            student.teamwork = teamwork
-            student. save(update_fields=['teamwork'])
-            print(f'В группу {teamwork} добавили {student.name}')
+        end_time = (datetime.combine(date.min, min_time) - datetime.min) + delta_time
+        end_time = (datetime.min + end_time).time()
+        teamwork, created = TeamWorkCalculation.objects.update_or_create(
+            start_time=min_time, end_time=end_time)
+        print(min_time, end_time)
+        students_gr = students.filter(Q(start_time__lte=min_time), Q(end_time__gte=end_time))
+
+        for student in students_gr:
+            teamwork.students_candidate.add(student)
+            print(f'В группу {teamwork} добавили {student.name} {student.start_time} {student.end_time}')
+        min_time = end_time
+
+    teamwork_calculation = TeamWorkCalculation.objects.order_by('-end_time').prefetch_related('students_candidate').first()
+    while teamwork_calculation:
+        calc_students = teamwork_calculation.students_candidate.filter().order_by('-end_time', '-start_time')[:3]
+        start_time=teamwork_calculation.start_time
+        end_time=teamwork_calculation.end_time
+        project_manager = ProjectManager.objects.first()
+        teamwork, created = TeamWork.objects.update_or_create(
+            start_time=start_time, end_time=end_time,
+            project_manager=project_manager)
+        for calc_student in calc_students:
+            calc_student.teamwork = teamwork
+            calc_student.save(update_fields=['teamwork'])
+            calc_student.calculation_teamwork.remove(teamwork_calculation)
+            print(start_time, end_time)
+            print(f'В группу {teamwork} добавили {calc_student.name}')
+            calc_student.calculation_teamwork.clear()
+        TeamWorkCalculation.objects.filter(id=teamwork_calculation.id).delete()
+        teamwork_calculation = TeamWorkCalculation.objects.order_by('-end_time').prefetch_related('students_candidate').first()
+    TeamWork.objects.filter(students=None).delete()
     return redirect('/admin/devman/teamwork/')
-
 
 def add_member(board_id, member_id, trello_api_key, trello_api_token):
 
@@ -150,7 +177,7 @@ def gen_trello(request):
         # Создание доски
 
         url = 'https://api.trello.com/1/boards/'
-        team_students = teamwork.student.all()
+        team_students = teamwork.students.all()
         students = []
         for student in team_students:
             students.append(student.name)
