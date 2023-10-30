@@ -18,13 +18,20 @@ LEVEL_CHOICES = ['june'] # , 'newbie+', 'newbie']
 
 def gen_stud(request):
     count = 15
+    try:
+        project_manager = ProjectManager.objects.first()
+        end_time = project_manager.end_time
+
+    except:
+        return redirect('/admin/devman/projectmanager/')
+    pm_end_time = int(end_time.hour)
     for number in range(count):
         name = f'student{number}'
         tg_account = f'@{name}'
-        gr_start_time = 21 - int(count/6)
+        gr_start_time = pm_end_time - int(count/6)
         level=choice(LEVEL_CHOICES)
-        start_time = randint(gr_start_time, 20)
-        end_time = randint(start_time + 1, 21)
+        start_time = randint(gr_start_time, pm_end_time - 1)
+        end_time = randint(start_time + 1, pm_end_time)
         start_time = time(start_time, 0)
         end_time = time(end_time, 0)
         student, created = Student.objects.update_or_create(
@@ -57,7 +64,8 @@ def save_pm(json_file):
                       'chat_id': proj_manager['chat_id'],
                       'trello_id': proj_manager['trello_id'],
                       'trello_key': proj_manager['trello_key'],
-                      'trello_token': proj_manager['trello_token']})
+                      'trello_token': proj_manager['trello_token'],
+                      'end_time': time(proj_manager['end_time'], 0)})
         print(project_manager, created)
 
 

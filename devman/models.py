@@ -30,7 +30,9 @@ class ProjectManager(models.Model):
                                  max_length=90,
                                  blank=True,
                                  null=True)
-
+    end_time = models.TimeField(verbose_name='Конец диапазона',
+                                default=time(20,00),
+                                db_index=True)
 
     def __str__(self) -> str:
         return str(self.name)
