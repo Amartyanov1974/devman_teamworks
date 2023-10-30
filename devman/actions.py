@@ -30,7 +30,10 @@ def gen_stud(request):
         tg_account = f'@{name}'
         gr_start_time = pm_end_time - int(count/6)
         level=choice(LEVEL_CHOICES)
-        start_time = randint(gr_start_time, pm_end_time - 1)
+        try:
+            start_time = randint(gr_start_time, pm_end_time - 1)
+        except ValueError:
+            start_time = pm_end_time - 1
         end_time = randint(start_time + 1, pm_end_time)
         start_time = time(start_time, 0)
         end_time = time(end_time, 0)
