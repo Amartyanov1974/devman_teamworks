@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from devman import actions
-from devman.views import ask_students_choose_time
+from devman.views import ask_students_choose_time, send_group_details
 
 urlpatterns = [
     path('', actions.redir, name='redir'),
@@ -32,4 +32,5 @@ urlpatterns = [
         ask_students_choose_time,
         name='ask_students_choose_time',
     ),
+    path('send_group_details/', send_group_details, name='send_group_details')
 ]

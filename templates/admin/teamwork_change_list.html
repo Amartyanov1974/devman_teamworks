@@ -20,7 +20,7 @@
         </form>
       </div>
       <div style="margin: 5px 5px 5px 5px;  display: block">
-        <form action="" method="POST">
+        <form action="{% url 'send_group_details' %}" method="POST">
           {% csrf_token %}
           <input type="submit" value="Разослать информацию" />
         </form>

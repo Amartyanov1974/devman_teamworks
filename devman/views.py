@@ -15,3 +15,13 @@ def ask_students_choose_time(request):
         ),
     )
     return HttpResponseRedirect(reverse('admin:devman_student_changelist'))
+
+
+def send_group_details(request):
+    call_command('send_group_details')
+
+    messages.success(
+        request,
+        'Детали по проектам отправлены студентам у которых указан ChatID',
+    )
+    return HttpResponseRedirect(reverse('admin:devman_teamwork_changelist'))
