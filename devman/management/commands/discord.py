@@ -16,7 +16,7 @@ class Command(BaseCommand):
         for group in TeamWork.objects.all():
 
             students = []
-            for student in group.student.all():
+            for student in group.students.all():
                 students.append(student.name)
 
             try:
